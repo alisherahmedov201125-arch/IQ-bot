@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"/>
+<meta name="theme-color" content="#0f0c29"/>
+<title>TestHub — Mini App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script src="/config.js"></script>
+</head>
+<body>
+<div class="bg-orbs"><div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div></div>
+
+<div id="app">
+  <header class="app-header">
+    <div class="logo">✨ TestHub</div>
+    <div id="user-chip" class="user-chip"></div>
+  </header>
+
+  <main>
+    <!-- BOSH SAHIFA -->
+    <section id="screen-home" class="screen active">
+      <div class="hero">
+        <h1 id="hero-title">Salom! 👋</h1>
+        <p>Testlarni tanlang va yechishni boshlang. Har bir natija tarixingizga saqlanadi.</p>
+      </div>
+      <div class="section-title">🧩 Barcha testlar</div>
+      <div id="tests-list"></div>
+    </section>
+
+    <!-- TEST YECHISH -->
+    <section id="screen-test" class="screen">
+      <button class="back-btn" onclick="go('home')">← Orqaga</button>
+      <div id="test-image-wrap" class="test-img-wrap" style="display:none"></div>
+      <h2 id="test-question" class="test-question"></h2>
+      <div id="variants-list"></div>
+      <button id="submit-answer-btn" class="btn-primary" onclick="submitAnswer()" disabled>Javobni yuborish</button>
+    </section>
+
+    <!-- TARIX -->
+    <section id="screen-history" class="screen">
+      <div class="section-title">📊 Mening tarixim</div>
+      <div id="history-list"></div>
+    </section>
+
+    <!-- ADMIN -->
+    <section id="screen-admin" class="screen">
+      <div class="hero">
+        <h1>⚙️ Admin panel</h1>
+        <p>Yangi test qo'shing, mavjud testlarni boshqaring.</p>
+      </div>
+      <button class="btn-primary" style="margin-bottom:18px" onclick="go('add')">➕ Yangi test qo'shish</button>
+      <div class="section-title">📋 Testlar ro'yxati</div>
+      <div id="admin-tests-list"></div>
+    </section>
+
+    <!-- TEST QO'SHISH -->
+    <section id="screen-add" class="screen">
+      <button class="back-btn" onclick="go('admin')">← Orqaga</button>
+      <div class="section-title">➕ Yangi test</div>
+
+      <div id="dropzone" class="dropzone">
+        <div class="dz-ico">🖼️</div>
+        <div><b>Rasm yuklash</b></div>
+        <div style="font-size:12px;margin-top:4px">Bosing yoki surting · PNG, JPG, WebP</div>
+      </div>
+      <input type="file" id="file-input" accept="image/*" hidden/>
+
+      <div id="preview-wrap" class="preview-wrap" style="display:none">
+        <img id="preview-img" alt="Preview"/>
+        <button class="icon-btn remove-img" onclick="removeImage()">✕</button>
+      </div>
+
+      <button id="ocr-btn" class="btn-ghost" onclick="runOcr()">🔎 Matnni avtomatik o'qish (OCR)</button>
+      <div id="ocr-status" class="ocr-status"></div>
+      <div id="ocr-progress" class="ocr-progress"><div id="ocr-bar"></div></div>
+
+      <div class="field-label">Savol</div>
+      <textarea id="question-input" class="question-input" placeholder="Savolni yozing..."></textarea>
+
+      <div class="field-label">Variantlar <span style="opacity:.6">(radio = to'g'ri javob)</span></div>
+      <div id="variants-wrap"></div>
+      <button class="btn-ghost" onclick="addVariantRow()">＋ Variant qo'shish</button>
+
+      <div style="height:16px"></div>
+      <button id="save-test-btn" class="btn-primary" onclick="saveTest()">💾 Testni saqlash</button>
+    </section>
+  </main>
+
+  <!-- TAB BAR -->
+  <nav id="tabbar" class="tabbar">
+    <button class="tab active" data-route="home" onclick="go('home')"><span class="tab-ico">🏠</span><span>Testlar</span></button>
+    <button class="tab" data-route="history" onclick="go('history')"><span class="tab-ico">📊</span><span>Tarix</span></button>
+    <button class="tab admin-only" data-route="admin" onclick="go('admin')" style="display:none"><span class="tab-ico">⚙️</span><span>Admin</span></button>
+  </nav>
+</div>
+
+<!-- NATIJA MODALI -->
+<div id="modal" class="modal-overlay hidden">
+  <div class="modal">
+    <div id="modal-emoji" class="emoji">🎉</div>
+    <h2 id="modal-title">To'g'ri!</h2>
+    <p id="modal-sub"></p>
+    <div id="modal-answer" class="answer-box"></div>
+    <div class="modal-actions">
+      <button class="btn-primary" style="flex:1" onclick="nextRandomTest()">Yana biri 🔄</button>
+      <button class="btn-ghost" style="flex:1" onclick="closeModal()">Yopish</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+<script src="app.js"></script>
+</body>
+</html>

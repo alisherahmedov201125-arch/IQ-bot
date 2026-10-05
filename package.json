@@ -1,0 +1,16 @@
+{
+  "name": "telegram-test-mini-app",
+  "version": "1.0.0",
+  "description": "Telegram bot + Mini App: test yechish, admin panel, tarix (blur dizayn)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "POLLING=1 node server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.10.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "telegraf": "^4.16.2"
+  }
+}
